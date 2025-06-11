@@ -36,6 +36,7 @@ h1, .lead {
   color: #34495e;
 }
 
+/* FOR TABLET/DESKTOP SIZE */
 @media (max-width: 576px) {
   .notepad {
     padding: 20px;

@@ -18,30 +18,38 @@ document.getElementById('weatherForm').addEventListener('submit', async function
     return;
   }
 
-  if (isNaN(startDate) || isNaN(endDate) || endDate < startDate) {
-    forecastDiv.innerHTML = '<div class="alert alert-danger">Please provide a valid date range.</div>';
+  const today = new Date();
+  const minStartDate = new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000);
+
+  if (
+    isNaN(startDate) ||
+    isNaN(endDate) ||
+    endDate < startDate ||
+    startDate < minStartDate
+  ) {
+    forecastDiv.innerHTML = '<div class="alert alert-danger">Please select a valid date range starting at least 14 days from today.</div>';
     return;
   }
 
-  const diffDays = Math.min(3, Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1);
   const apiKey = '4e1e8413a26c45d698b54241250506';
-  const url = `https://api.weatherapi.com/v1/forecast.json?q=${encodeURIComponent(city)}&days=${diffDays}&key=${apiKey}`;
+  const msInDay = 24 * 60 * 60 * 1000;
+  const totalDays = Math.min(14, Math.floor((endDate - startDate) / msInDay) + 1);
 
   try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Invalid city or API error');
-    const data = await res.json();
+    for (let i = 0; i < totalDays; i++) {
+      const currentDate = new Date(startDate.getTime() + i * msInDay);
+      const dt = currentDate.toISOString().split('T')[0];
+      const url = `https://api.weatherapi.com/v1/future.json?q=${encodeURIComponent(city)}&dt=${dt}&key=${apiKey}`;
 
-    if (!data.location || !data.location.name.toLowerCase().includes(city.toLowerCase())) {
-      throw new Error('City not matched');
-    }
+      const res = await fetch(url);
+      const data = await res.json();
 
-    if (!data.forecast || !data.forecast.forecastday) {
-      throw new Error('Invalid forecast data');
-    }
+      if (!res.ok || !data.forecast?.forecastday || !data.location?.name.toLowerCase().includes(city.toLowerCase())) {
+        throw new Error('Invalid city or data');
+      }
 
-    data.forecast.forecastday.forEach(day => {
-      const weatherHtml = `
+      const day = data.forecast.forecastday[0];
+      forecastDiv.innerHTML += `
         <div class="col-md-4">
           <div class="weather-card h-100">
             <h5>${day.date}</h5>
@@ -53,8 +61,7 @@ document.getElementById('weatherForm').addEventListener('submit', async function
           </div>
         </div>
       `;
-      forecastDiv.innerHTML += weatherHtml;
-    });
+    }
   } catch (error) {
     cityInput.classList.add('is-invalid');
     cityError.textContent = 'Incorrect city name';
