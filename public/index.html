@@ -1,5 +1,3 @@
-<!-- index.html -->
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -11,26 +9,31 @@
 <body>
   <div class="container py-4">
     <div class="text-center mb-4">
-      <h1 class="h4 h3-md">Plan Your Trip According to the Weather!</h1>
+      <h1 class="h3">Plan Your Trip According to the Weather!</h1>
+      <p class="lead">Check the weather forecast before you go! Stay dry, dress right, and enjoy your journey.</p>
     </div>
     <div class="notepad">
-        <form id="weatherForm" novalidate>
-        <div class="mb-3">
-          <label for="city" class="form-label">City</label>
-          <input type="text" class="form-control" id="city" placeholder="Enter city name" required>
-          <div id="cityError" class="text-danger mt-1 small"></div>
+      <form id="weatherForm" novalidate>
+        <div class="row g-3 align-items-end">
+          <div class="col-lg-4">
+            <label for="city" class="form-label">City</label>
+            <input type="text" class="form-control" id="city" placeholder="Enter city name">
+            <div id="cityError" class="text-danger mt-1 small"></div>
+          </div>
+          <div class="col-lg-3">
+            <label for="startDate" class="form-label">Start Date</label>
+            <input type="date" class="form-control" id="startDate" required>
+          </div>
+          <div class="col-lg-3">
+            <label for="endDate" class="form-label">End Date</label>
+            <input type="date" class="form-control" id="endDate" required>
+          </div>
+          <div class="col-lg-2">
+            <button type="submit" class="btn btn-primary w-100">Get Forecast</button>
+          </div>
         </div>
-        <div class="mb-3">
-          <label for="startDate" class="form-label">Start Date</label>
-          <input type="date" class="form-control" id="startDate" required>
-        </div>
-        <div class="mb-3">
-          <label for="endDate" class="form-label">End Date (3 days only)</label>
-          <input type="date" class="form-control" id="endDate" required>
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Get Forecast</button>
       </form>
-      <div id="forecastResult" class="mt-4"></div>
+      <div id="forecastResult" class="row mt-4 gx-4"></div>
     </div>
   </div>
 
