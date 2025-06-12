@@ -1,4 +1,4 @@
-document.getElementById('weatherForm').addEventListener('submit', async function(e) {
+document.getElementById('weatherForm').addEventListener('submit', async function (e) {
   e.preventDefault();
 
   const cityInput = document.getElementById('city');
